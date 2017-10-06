@@ -1,0 +1,8 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "quotemark": [true, "single", "avoid-template", "avoid-escape"],
+    "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
+    "no-console": [true]
+  }
+}

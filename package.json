@@ -1,0 +1,33 @@
+{
+  "name": "ioc-typescript",
+  "version": "0.0.1",
+  "description": "IOC container for Typescript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint --fix -t stylish src/**/*.ts examples/**/*.ts",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "mocha --colors --require test/setup.ts 'src/**/**.spec.ts'",
+    "test:examples": "mocha --colors --require test/setup.ts 'examples/**/**.spec.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zh3/ioc-typescript.git"
+  },
+  "author": "Zhanzhan He",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zh3/ioc-typescript/issues"
+  },
+  "homepage": "https://github.com/zh3/ioc-typescript#readme",
+  "devDependencies": {
+    "@types/chai": "4.0.4",
+    "@types/mocha": "2.2.43",
+    "@types/node": "8.0.32",
+    "chai": "4.1.2",
+    "reflect-metadata": "0.1.10",
+    "ts-node": "3.3.0",
+    "tslint": "5.7.0",
+    "typescript": "2.5.3"
+  }
+}
