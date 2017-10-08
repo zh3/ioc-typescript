@@ -3,7 +3,7 @@ import { DependencyResolver, IDependencyNode } from './dependency-node';
 export default class ClassDependencyNode<T extends Newable> implements IDependencyNode {
     constructor(
         private ClassConstructor: Newable,
-        private dependencies: TypeID[]) {
+        public dependencies: TypeID[]) {
     }
 
     public getDependency(resolveDependency: DependencyResolver): T {
