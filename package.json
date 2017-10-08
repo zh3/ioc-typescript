@@ -6,9 +6,9 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint --fix -t stylish src/**/*.ts examples/**/*.ts",
-    "test": "npm run lint && npm run test:unit",
-    "test:unit": "mocha --colors --require test/setup.ts 'src/**/**.spec.ts'",
-    "test:examples": "mocha --colors --require test/setup.ts 'examples/**/**.spec.ts'"
+    "test": "npm run lint && npm run test:all",
+    "test:all": "mocha --colors --require test-setup.ts 'src/**/**.spec.ts'",
+    "test:examples": "mocha --colors --require test-setup.ts 'src/examples/**/**.spec.ts'"
   },
   "repository": {
     "type": "git",

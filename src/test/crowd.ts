@@ -1,12 +1,8 @@
-import { inject, injectable } from '../src/index';
+import { inject, injectable } from '../index';
 
 export interface ICrowd {
     cheer(): string;
 }
-
-export const crowdTypeIDs = Object.freeze({
-    CROWD: Symbol('CROWD'),
-});
 
 @injectable
 export class ExcitedCrowd implements ICrowd {

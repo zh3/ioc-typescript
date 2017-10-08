@@ -1,20 +1,17 @@
-import { inject, injectable } from '../src/index';
-import { crowdTypeIDs, ICrowd } from './crowd';
-import { IVehicle, vehicleTypeIDs } from './vehicle';
+import { inject, injectable } from '../index';
+import { ICrowd } from './crowd';
+import testTypeIDs from './test-type-ids';
+import { IVehicle } from './vehicle';
 
 export interface IRace {
     race(): string[];
 }
 
-export const raceTypeIDs = Object.freeze({
-    RACE: Symbol('RACE'),
-});
-
 @injectable
 export class TimeTrial implements IRace {
     constructor(
-        @inject(crowdTypeIDs.CROWD) private crowd: ICrowd,
-        @inject(vehicleTypeIDs.VEHICLE) private vehicle: IVehicle,
+        @inject(testTypeIDs.CROWD) private crowd: ICrowd,
+        @inject(testTypeIDs.VEHICLE) private vehicle: IVehicle,
     ) {
     }
 

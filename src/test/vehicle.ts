@@ -1,13 +1,9 @@
-import { inject, injectable } from '../src/index';
+import { inject, injectable } from '../index';
 
 export interface IVehicle {
     accelerate(): void;
     checkSpeed(): string;
 }
-
-export const vehicleTypeIDs = Object.freeze({
-    VEHICLE: Symbol('VEHICLE'),
-});
 
 @injectable
 export class Car implements IVehicle {

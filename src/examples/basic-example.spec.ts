@@ -1,26 +1,24 @@
 import { assert } from 'chai';
-import Container from '../src';
+import Container from '../';
 import {
-    crowdTypeIDs,
     ExcitedCrowd,
     ICrowd,
-} from './crowd';
+} from '../test/crowd';
 import {
     IRace,
-    raceTypeIDs,
     TimeTrial,
-} from './race';
+} from '../test/race';
+import testTypeIDs from '../test/test-type-ids';
 import {
     Car,
     IVehicle,
-    vehicleTypeIDs,
-} from './vehicle';
+} from '../test/vehicle';
 
 describe('basic usage', () => {
     it('should create dependency with no subdependencies', () => {
         const container: Container = new Container()
-            .for<IVehicle>(vehicleTypeIDs.VEHICLE).use(Car);
-        const vehicle: IVehicle = container.getInstance<IVehicle>(vehicleTypeIDs.VEHICLE);
+            .for<IVehicle>(testTypeIDs.VEHICLE).use(Car);
+        const vehicle: IVehicle = container.getInstance<IVehicle>(testTypeIDs.VEHICLE);
         vehicle.accelerate();
 
         assert.equal(vehicle.checkSpeed(), 'current speed is: 50');
@@ -28,10 +26,10 @@ describe('basic usage', () => {
 
     it('should create dependency with one level of subdependencies', () => {
         const container: Container = new Container()
-            .for<IVehicle>(vehicleTypeIDs.VEHICLE).use(Car)
-            .for<IRace>(raceTypeIDs.RACE).use(TimeTrial)
-            .for<ICrowd>(crowdTypeIDs.CROWD).use(ExcitedCrowd);
-        const race: IRace = container.getInstance<IRace>(raceTypeIDs.RACE);
+            .for<IVehicle>(testTypeIDs.VEHICLE).use(Car)
+            .for<IRace>(testTypeIDs.RACE).use(TimeTrial)
+            .for<ICrowd>(testTypeIDs.CROWD).use(ExcitedCrowd);
+        const race: IRace = container.getInstance<IRace>(testTypeIDs.RACE);
         const raceRecord = race.race();
 
         assert.deepEqual(raceRecord, [
