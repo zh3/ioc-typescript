@@ -22,7 +22,7 @@ export default class DependencyRegistry implements IDependencyRegistry {
         }
 
         const dependencyTypeIDs = getDependencyIDs(concreteType);
-        this.dependenciesByType.set(typeID, new ClassDependencyNode(concreteType, dependencyTypeIDs));
+        this.dependenciesByType.set(typeID, new ClassDependencyNode<T>(concreteType, dependencyTypeIDs));
 
         return new DependencyRegistry(this.dependenciesByType);
     }
