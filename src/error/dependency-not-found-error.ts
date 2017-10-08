@@ -1,5 +1,5 @@
 export class DependencyNotFoundError extends Error {
-    constructor(dependencyID: TypeID) {
-        super(`No registered way to build dependency of type ${String(dependencyID)}`);
+    constructor(typeID: TypeID) {
+        super(`No registered way to build dependency of type ${String(typeID)}`);
     }
 }

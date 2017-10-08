@@ -1,7 +1,8 @@
-import { DependencyNotFoundError } from '../error';
+import { CircularDependencyError, DependencyNotFoundError } from '../error';
 import { getDependencyIDs } from '../metadata/metadata-reader';
 import ClassDependencyNode from './class-dependency-node';
 import { IDependencyNode } from './dependency-node';
+import findPath from './find-path';
 
 export interface IDependencyRegistry {
     getInstance<T>(typeID: TypeID): T;
@@ -15,6 +16,11 @@ export default class DependencyRegistry implements IDependencyRegistry {
     }
 
     public registerDependency<T extends Newable>(typeID: TypeID, concreteType: T): DependencyRegistry {
+        const pathConcreteTypeToTypeID = findPath(concreteType, typeID, this.dependenciesByType);
+        if (pathConcreteTypeToTypeID) {
+            throw new CircularDependencyError(typeID, pathConcreteTypeToTypeID);
+        }
+
         const dependencyTypeIDs = getDependencyIDs(concreteType);
         this.dependenciesByType.set(typeID, new ClassDependencyNode(concreteType, dependencyTypeIDs));
 
