@@ -1,4 +1,4 @@
-import { inject, injectable } from '../index';
+import { inject, injectable, named } from '../index';
 import { ICrowd } from './crowd';
 import testTypeIDs from './test-type-ids';
 import { IVehicle } from './vehicle';
@@ -10,8 +10,8 @@ export interface IRace {
 @injectable
 export class TimeTrial implements IRace {
     constructor(
-        @inject(testTypeIDs.CROWD) private crowd: ICrowd,
-        @inject(testTypeIDs.VEHICLE) private vehicle: IVehicle,
+        @named('crowd') @inject(testTypeIDs.CROWD) private crowd: ICrowd,
+        @inject(testTypeIDs.VEHICLE) @named('vehicle') private vehicle: IVehicle,
     ) {
     }
 

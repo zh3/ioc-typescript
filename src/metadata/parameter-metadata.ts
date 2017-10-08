@@ -1,6 +1,6 @@
-export default class ParameterMetadata {
-    constructor(
-        public typeID: TypeID,
-    ) {
-    }
+interface IParameterMetadata {
+    typeID: TypeID;
+    name: string;
 }
+
+export default IParameterMetadata;

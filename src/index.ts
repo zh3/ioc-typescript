@@ -3,3 +3,4 @@ export default Container;
 
 export * from './decorators/injectable';
 export * from './decorators/inject';
+export * from './decorators/named';

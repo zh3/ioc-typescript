@@ -35,7 +35,7 @@ export default function findPath<T extends Newable>(
     dependenciesByType: Map<TypeID, IDependencyNode>,
 ): TypeID[] {
     const sourceDependencyTypeIDs: TypeID[] = getDependencyIDs(sourceConcreteType); // TODO handle other types
-    let sourceDependencySearchNodes: ISearchNode[] = buildSearchNodes(sourceDependencyTypeIDs);
+    const sourceDependencySearchNodes: ISearchNode[] = buildSearchNodes(sourceDependencyTypeIDs);
 
     while (sourceDependencySearchNodes.length > 0) {
         const searchNode: ISearchNode = sourceDependencySearchNodes.shift();
@@ -45,7 +45,8 @@ export default function findPath<T extends Newable>(
         }
 
         if (dependenciesByType.has(searchNode.typeID)) {
-            const dependencyTypeIDs: TypeID[] = dependenciesByType.get(searchNode.typeID).dependencies; // TODO handle other types, don't break encapsulation
+            // TODO handle other types, don't break encapsulation
+            const dependencyTypeIDs: TypeID[] = dependenciesByType.get(searchNode.typeID).dependencies;
             const dependencySearchNodes: ISearchNode[] = buildSearchNodes(dependencyTypeIDs, searchNode);
             sourceDependencySearchNodes.unshift(...dependencySearchNodes);
         }
