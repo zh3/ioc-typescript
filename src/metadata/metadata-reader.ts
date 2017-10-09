@@ -1,11 +1,11 @@
 import metadataKeys from '../constants/metadata-keys';
-import parameterMetadataKeys from '../constants/parameter-metadata-keys';
+import IParameterMetadata from './parameter-metadata';
 
-export function getDependencyIDs(concreteType: Newable): TypeID[] {
+export function getParameterMetadataList(concreteType: Newable): IParameterMetadata[] {
     if (Reflect.hasOwnMetadata(metadataKeys.PARAMMETADATA, concreteType)) {
         const parameterMetadataList = Reflect.getMetadata(metadataKeys.PARAMMETADATA, concreteType);
         return parameterMetadataList.map((parameterMetadata: any) => {
-            return parameterMetadata.typeID;
+            return parameterMetadata;
         });
     }
 

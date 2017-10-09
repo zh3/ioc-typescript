@@ -1,4 +1,5 @@
-import { getDependencyIDs } from '../metadata/metadata-reader';
+import { getParameterMetadataList } from '../metadata/metadata-reader';
+import IParameterMetadata from '../metadata/parameter-metadata';
 import { IDependencyNode } from './dependency-node';
 
 interface ISearchNode {
@@ -22,10 +23,13 @@ function buildResultPath(endNode: ISearchNode): TypeID[] {
     return resultPath;
 }
 
-function buildSearchNodes(typeIDs: TypeID[], searchParent?: ISearchNode): ISearchNode[] {
-    return typeIDs.map((typeID) => ({
+function buildSearchNodes(
+    parameterMetadataList: IParameterMetadata[],
+    searchParent?: ISearchNode,
+): ISearchNode[] {
+    return parameterMetadataList.map((parameterMetadata: IParameterMetadata) => ({
         searchParent,
-        typeID,
+        typeID: parameterMetadata.typeID,
     }));
 }
 
@@ -34,8 +38,8 @@ export default function findPath<T extends Newable>(
     destinationTypeID: TypeID,
     dependenciesByType: Map<TypeID, IDependencyNode>,
 ): TypeID[] {
-    const sourceDependencyTypeIDs: TypeID[] = getDependencyIDs(sourceConcreteType); // TODO handle other types
-    const sourceDependencySearchNodes: ISearchNode[] = buildSearchNodes(sourceDependencyTypeIDs);
+    const sourceDependencyParameterMetadata: IParameterMetadata[] = getParameterMetadataList(sourceConcreteType);
+    const sourceDependencySearchNodes: ISearchNode[] = buildSearchNodes(sourceDependencyParameterMetadata);
 
     while (sourceDependencySearchNodes.length > 0) {
         const searchNode: ISearchNode = sourceDependencySearchNodes.shift();
@@ -46,8 +50,13 @@ export default function findPath<T extends Newable>(
 
         if (dependenciesByType.has(searchNode.typeID)) {
             // TODO handle other types, don't break encapsulation
-            const dependencyTypeIDs: TypeID[] = dependenciesByType.get(searchNode.typeID).dependencies;
-            const dependencySearchNodes: ISearchNode[] = buildSearchNodes(dependencyTypeIDs, searchNode);
+            const dependencyParameterMetadataList: IParameterMetadata[] = dependenciesByType.get(
+                searchNode.typeID,
+            ).parameterMetadataList;
+            const dependencySearchNodes: ISearchNode[] = buildSearchNodes(
+                dependencyParameterMetadataList,
+                searchNode,
+            );
             sourceDependencySearchNodes.unshift(...dependencySearchNodes);
         }
     }

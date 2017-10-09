@@ -1,5 +1,6 @@
 import { CircularDependencyError, DependencyNotFoundError } from '../error';
-import { getDependencyIDs } from '../metadata/metadata-reader';
+import { getParameterMetadataList } from '../metadata/metadata-reader';
+import IParameterMetadata from '../metadata/parameter-metadata';
 import ClassDependencyNode from './class-dependency-node';
 import { IDependencyNode } from './dependency-node';
 import findPath from './find-path';
@@ -21,8 +22,8 @@ export default class DependencyRegistry implements IDependencyRegistry {
             throw new CircularDependencyError(typeID, pathConcreteTypeToTypeID);
         }
 
-        const dependencyTypeIDs = getDependencyIDs(concreteType);
-        this.dependenciesByType.set(typeID, new ClassDependencyNode<T>(concreteType, dependencyTypeIDs));
+        const parameterMetadataList: IParameterMetadata[] = getParameterMetadataList(concreteType);
+        this.dependenciesByType.set(typeID, new ClassDependencyNode<T>(concreteType, parameterMetadataList));
 
         return new DependencyRegistry(this.dependenciesByType);
     }

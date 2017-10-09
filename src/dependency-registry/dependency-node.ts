@@ -1,6 +1,8 @@
+import IParameterMetadata from '../metadata/parameter-metadata';
+
 export type DependencyResolver = (TypeID) => any;
 
 export interface IDependencyNode {
-    dependencies: TypeID[]; // TODO fix this being exposed directly
+    parameterMetadataList: IParameterMetadata[];
     getDependency<T>(resolveDependency: DependencyResolver): any;
 }
