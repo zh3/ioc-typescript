@@ -1,5 +1,8 @@
 # ioc-typescript
-Inversion of control container for Typescript
+Inversion of control container for Typescript.
+
+This explores what is possible with [decorators](https://tc39.github.io/proposal-decorators/), currently a stage 2 draft and [reflect-metadata](https://rbuckton.github.io/reflect-metadata/), a stage 1 proposal. Decorators are usable with typescript / babel and a [shim](https://www.npmjs.com/package/reflect-metadata) exists for reflect-metadata.
+
 ## Installation
 `reflect-metadata` needs to be included at the root of the project.
 ```
