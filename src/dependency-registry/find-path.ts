@@ -49,7 +49,6 @@ export default function findPath<T extends Newable>(
         }
 
         if (dependenciesByType.has(searchNode.typeID)) {
-            // TODO handle other types, don't break encapsulation
             const dependencyParameterMetadataList: IParameterMetadata[] = dependenciesByType.get(
                 searchNode.typeID,
             ).parameterMetadataList;

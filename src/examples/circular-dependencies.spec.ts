@@ -84,7 +84,37 @@ describe('circular dependencies', () => {
         assert.throws(
             twoCycleTreeFactory,
             'Cannot register dependency for Symbol(E). Would form a cycle: ' +
-            'Symbol(E) -> Symbol(A) -> Symbol(B) -> Symbol(C) -> Symbol(E)',
+             'Symbol(E) -> Symbol(A) -> Symbol(B) -> Symbol(C) -> Symbol(E)',
+        );
+    });
+
+    it('should fail regardless of dependency registration order', () => {
+        /*
+         *  ------> A <--
+         *  |       |   |
+         *  |       B   |
+         *  |       |   |
+         *  |       C - E
+         *  |      /
+         *  |     D
+         *  |    /
+         *  -- F
+         *
+         */
+        const twoCycleTreeFactory = () => {
+            const container: Container = new Container()
+                .for<C>(cycleTypeIDs.C).use(C)
+                .for<D>(cycleTypeIDs.D).use(D)
+                .for<E>(cycleTypeIDs.E).use(E)
+                .for<F>(cycleTypeIDs.F).use(F)
+                .for<A>(cycleTypeIDs.A).use(A)
+                .for<B>(cycleTypeIDs.B).use(B);
+        };
+
+        assert.throws(
+            twoCycleTreeFactory,
+            'Cannot register dependency for Symbol(B). Would form a cycle: ' +
+             'Symbol(B) -> Symbol(C) -> Symbol(D) -> Symbol(F) -> Symbol(A) -> Symbol(B)',
         );
     });
 });
