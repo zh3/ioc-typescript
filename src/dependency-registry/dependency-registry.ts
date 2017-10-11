@@ -1,4 +1,4 @@
-import { CircularDependencyError, DependencyNotFoundError } from '../error';
+import { CircularDependencyError, DependencyNotFoundError, InvalidTypeRegistrationError } from '../error';
 import { getParameterMetadataList } from '../metadata/metadata-reader';
 import { validateParameterMetadata } from '../metadata/metadata-validator';
 import IParameterMetadata from '../metadata/parameter-metadata';
@@ -18,6 +18,10 @@ export default class DependencyRegistry implements IDependencyRegistry {
     }
 
     public registerDependency<T extends Newable>(typeID: TypeID, concreteType: T): DependencyRegistry {
+        if (!concreteType) {
+            throw new InvalidTypeRegistrationError(typeID, concreteType);
+        }
+
         validateParameterMetadata(concreteType);
 
         const pathConcreteTypeToTypeID = findPath(concreteType, typeID, this.dependenciesByType);

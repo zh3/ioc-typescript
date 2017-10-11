@@ -1,6 +1,6 @@
 import metadataKeys from '../constants/metadata-keys';
 import { NotSupportedError } from '../error/';
-import { InjectableRequiredError, DirectCircularDependencyError } from '../error/';
+import { DirectCircularDependencyError, InjectableRequiredError } from '../error/';
 import ICompilerSerializedType from './compiler-serialized-types';
 import { isPrimitive } from './compiler-serialized-types';
 import IParameterMetadata from './parameter-metadata';
@@ -14,7 +14,7 @@ function validatePrimitive(userDefinedParameterMetadata: IParameterMetadata) {
     throw new NotSupportedError('Primitives are not yet supported');
 }
 
-function validateClass(userDefinedParameterMetadata: IParameterMetadata, typeName:string, index: number) {
+function validateClass(userDefinedParameterMetadata: IParameterMetadata, typeName: string, index: number) {
     if (!userDefinedParameterMetadata || !userDefinedParameterMetadata.typeID) {
         throw new InjectableRequiredError(typeName, index);
     }

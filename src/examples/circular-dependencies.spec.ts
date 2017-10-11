@@ -121,7 +121,6 @@ describe('circular dependencies', () => {
         );
     });
 
-
     it('should fail specifying parameter if modules directly depend on each other at import time', () => {
         /*
          *      ----- BDirect

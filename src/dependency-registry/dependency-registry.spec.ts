@@ -12,4 +12,16 @@ describe('should register dependencies', () => {
         const undependent: IUndependent = dependencyRegistry.getInstance<IUndependent>(testTypeIDs.UNDEPENDENT);
         assert.equal(undependent.beBoring(), '...');
     });
+
+    it('should throw error if undefined provided', () => {
+        const badUndependentFactory = () => {
+            const dependencyRegistry = new DependencyRegistry()
+                .registerDependency(testTypeIDs.UNDEPENDENT, undefined);
+        };
+
+        assert.throws(
+            badUndependentFactory,
+            'Tried to register invalid value undefined for type ID: Symbol(UNDEPENDENT)',
+        );
+    });
 });
