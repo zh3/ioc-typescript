@@ -12,6 +12,10 @@ import D, { ID } from '../test/cycle/D';
 import E, { IE } from '../test/cycle/E';
 import F, { IF } from '../test/cycle/F';
 
+import X, { IX } from '../test/cycle/X';
+import Y, { IY } from '../test/cycle/Y';
+import Z, { IZ } from '../test/cycle/Z';
+
 import Reflexive from '../test/cycle/reflexive';
 
 import Loop from '../test/cycle/loop';
@@ -118,6 +122,30 @@ describe('circular dependencies', () => {
             twoCycleTreeFactory,
             'Cannot register dependency for Symbol(B). Would form a cycle: ' +
              'Symbol(B) -> Symbol(C) -> Symbol(D) -> Symbol(F) -> Symbol(A) -> Symbol(B)',
+        );
+    });
+
+    it('should fail for convergent circular dependencies', () => {
+        /*
+         *
+         *    X     Y <--
+         *    |     |   |
+         *    -> Z <-   |
+         *       |      |
+         *       --------
+         *
+         */
+        const convergentTreeFactory = () => {
+            const container: Container = new Container()
+                .for<IX>(cycleTypeIDs.X).use(X)
+                .for<IY>(cycleTypeIDs.Y).use(Y)
+                .for<IZ>(cycleTypeIDs.Z).use(Z);
+        };
+
+        assert.throws(
+            convergentTreeFactory,
+            'Cannot register dependency for Symbol(Z). Would form a cycle: ' +
+             'Symbol(Z) -> Symbol(Y) -> Symbol(Z)',
         );
     });
 
