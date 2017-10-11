@@ -1,14 +1,11 @@
 import { injectable, inject } from '../../';
 import cycleTypeIds from './cycle-type-ids';
-import { IA } from './A';
-
-export interface IE {
-}
+import ADirect from './a-direct';
 
 @injectable
-export default class E implements IE {
+export default class BDirect {
     constructor(
-        @inject(cycleTypeIds.A) a: IA,
+        @inject(cycleTypeIds.ADIRECT) adirect: ADirect,
     ) {
     }
 }

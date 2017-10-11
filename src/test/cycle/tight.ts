@@ -1,11 +1,14 @@
 import { injectable, inject } from '../../';
 import cycleTypeIds from './cycle-type-ids';
-import Loop from './loop';
+import { ILoop } from './loop';
+
+export interface ITight {
+}
 
 @injectable
-export default class Tight {
+export default class Tight implements ITight {
     constructor(
-        @inject(cycleTypeIds.Loop) loop: Loop,
+        @inject(cycleTypeIds.Loop) loop: ILoop,
     ) {
     }
 }

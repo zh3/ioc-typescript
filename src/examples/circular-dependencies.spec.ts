@@ -2,12 +2,15 @@ import { assert } from 'chai';
 import Container from '../';
 import { CircularDependencyError } from '../error/circular-dependency-error';
 
-import A from '../test/cycle/A';
-import B from '../test/cycle/B';
-import C from '../test/cycle/C';
-import D from '../test/cycle/D';
-import E from '../test/cycle/E';
-import F from '../test/cycle/F';
+import ADirect from '../test/cycle/a-direct';
+import BDirect from '../test/cycle/b-direct';
+
+import A, { IA } from '../test/cycle/A';
+import B, { IB } from '../test/cycle/B';
+import C, { IC } from '../test/cycle/C';
+import D, { ID } from '../test/cycle/D';
+import E, { IE } from '../test/cycle/E';
+import F, { IF } from '../test/cycle/F';
 
 import Reflexive from '../test/cycle/reflexive';
 
@@ -27,7 +30,7 @@ describe('circular dependencies', () => {
          */
         const reflexiveFactory = () => {
             const container: Container = new Container()
-                .for<A>(cycleTypeIDs.Reflexive).use(Reflexive);
+                .for<IA>(cycleTypeIDs.Reflexive).use(Reflexive);
         };
 
         assert.throws(
@@ -47,8 +50,8 @@ describe('circular dependencies', () => {
          */
         const tightLoopFactory = () => {
             const container: Container = new Container()
-                .for<A>(cycleTypeIDs.Tight).use(Tight)
-                .for<A>(cycleTypeIDs.Loop).use(Loop);
+                .for<IA>(cycleTypeIDs.Tight).use(Tight)
+                .for<IA>(cycleTypeIDs.Loop).use(Loop);
         };
 
         assert.throws(
@@ -73,12 +76,12 @@ describe('circular dependencies', () => {
          */
         const twoCycleTreeFactory = () => {
             const container: Container = new Container()
-                .for<A>(cycleTypeIDs.A).use(A)
-                .for<B>(cycleTypeIDs.B).use(B)
-                .for<C>(cycleTypeIDs.C).use(C)
-                .for<D>(cycleTypeIDs.D).use(D)
-                .for<E>(cycleTypeIDs.E).use(E)
-                .for<F>(cycleTypeIDs.F).use(F);
+                .for<IA>(cycleTypeIDs.A).use(A)
+                .for<IB>(cycleTypeIDs.B).use(B)
+                .for<IC>(cycleTypeIDs.C).use(C)
+                .for<ID>(cycleTypeIDs.D).use(D)
+                .for<IE>(cycleTypeIDs.E).use(E)
+                .for<IF>(cycleTypeIDs.F).use(F);
         };
 
         assert.throws(
@@ -103,12 +106,12 @@ describe('circular dependencies', () => {
          */
         const twoCycleTreeFactory = () => {
             const container: Container = new Container()
-                .for<C>(cycleTypeIDs.C).use(C)
-                .for<D>(cycleTypeIDs.D).use(D)
-                .for<E>(cycleTypeIDs.E).use(E)
-                .for<F>(cycleTypeIDs.F).use(F)
-                .for<A>(cycleTypeIDs.A).use(A)
-                .for<B>(cycleTypeIDs.B).use(B);
+                .for<IC>(cycleTypeIDs.C).use(C)
+                .for<ID>(cycleTypeIDs.D).use(D)
+                .for<IE>(cycleTypeIDs.E).use(E)
+                .for<IF>(cycleTypeIDs.F).use(F)
+                .for<IA>(cycleTypeIDs.A).use(A)
+                .for<IB>(cycleTypeIDs.B).use(B);
         };
 
         assert.throws(
@@ -116,5 +119,23 @@ describe('circular dependencies', () => {
             'Cannot register dependency for Symbol(B). Would form a cycle: ' +
              'Symbol(B) -> Symbol(C) -> Symbol(D) -> Symbol(F) -> Symbol(A) -> Symbol(B)',
         );
+    });
+
+
+    it('should fail specifying parameter if modules directly depend on each other at import time', () => {
+        /*
+         *      ----- BDirect
+         *      |        ^
+         *      v        |
+         *    ADirect ----
+         *
+         */
+        const directCycleFactory = () => {
+            const container: Container = new Container()
+                .for<ADirect>(cycleTypeIDs.ADIRECT).use(ADirect)
+                .for<BDirect>(cycleTypeIDs.BDIRECT).use(BDirect);
+        };
+
+        assert.throws(directCycleFactory, 'Parameter at index 0 of class BDirect is a circular dependency');
     });
 });

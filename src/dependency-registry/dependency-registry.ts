@@ -1,5 +1,6 @@
 import { CircularDependencyError, DependencyNotFoundError } from '../error';
 import { getParameterMetadataList } from '../metadata/metadata-reader';
+import { validateParameterMetadata } from '../metadata/metadata-validator';
 import IParameterMetadata from '../metadata/parameter-metadata';
 import ClassDependencyNode from './class-dependency-node';
 import { IDependencyNode } from './dependency-node';
@@ -17,6 +18,8 @@ export default class DependencyRegistry implements IDependencyRegistry {
     }
 
     public registerDependency<T extends Newable>(typeID: TypeID, concreteType: T): DependencyRegistry {
+        validateParameterMetadata(concreteType);
+
         const pathConcreteTypeToTypeID = findPath(concreteType, typeID, this.dependenciesByType);
         if (pathConcreteTypeToTypeID) {
             throw new CircularDependencyError(typeID, pathConcreteTypeToTypeID);

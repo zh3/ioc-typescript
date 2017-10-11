@@ -1,13 +1,16 @@
 import { injectable, inject } from '../../';
 import cycleTypeIds from './cycle-type-ids';
-import D from './D';
-import E from './E';
+import { ID } from './D';
+import { IE } from './E';
+
+export interface IC {
+}
 
 @injectable
-export default class C {
+export default class C implements IC {
     constructor(
-        @inject(cycleTypeIds.D) d: D,
-        @inject(cycleTypeIds.E) e: E
+        @inject(cycleTypeIds.D) d: ID,
+        @inject(cycleTypeIds.E) e: IE
     ) {
     }
 }

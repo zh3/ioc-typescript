@@ -1,11 +1,14 @@
 import { injectable, inject } from '../../';
 import cycleTypeIds from './cycle-type-ids';
-import A from './A';
+import { IA } from './A';
+
+export interface IF {
+}
 
 @injectable
-export default class F {
+export default class F implements IF {
     constructor(
-        @inject(cycleTypeIds.A) A: A,
+        @inject(cycleTypeIds.A) a: IA,
     ) {
     }
 }

@@ -1,4 +1,6 @@
 const cycleTypeIDs = Object.freeze({
+    ADIRECT: Symbol('ADirect'),
+    BDIRECT: Symbol('BDirect'),
     A: Symbol('A'),
     B: Symbol('B'),
     C: Symbol('C'),
