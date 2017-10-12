@@ -14,6 +14,11 @@ import {
     IVehicle,
 } from '../test/vehicle';
 
+import {
+    IPerson,
+    Person,
+} from '../test/person';
+
 describe('basic usage', () => {
     it('should create dependency with no subdependencies', () => {
         const container: Container = new Container()
@@ -38,5 +43,20 @@ describe('basic usage', () => {
             'current speed is: 50',
             'YAY!',
         ]);
+    });
+
+    it('should create dependency with primitive dependencies', () => {
+        const container: Container = new Container()
+            .for<IPerson>(testTypeIDs.PERSON).use(Person);
+
+        container.forConcreteType(Person)
+            .forParamNamed('name').useConstantValue('August')
+            .forParamNamed('age').useConstantValue(26)
+            .forParamNamed('siblings').useConstantValue(['June', 'May']);
+
+        const person: IPerson = container.getInstance<IPerson>(testTypeIDs.PERSON);
+        const intro: string = person.introduce();
+
+        assert.equal(intro, 'My name is August and I am 26. My siblings are June, May');
     });
 });

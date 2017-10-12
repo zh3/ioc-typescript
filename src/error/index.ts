@@ -5,4 +5,7 @@ export * from './inject-applied-to-property-error';
 export * from './circular-dependency-error';
 export * from './direct-circular-dependency-error';
 export * from './injectable-required-error';
+export * from './inject-required-error';
+export * from './primitive-name-required-error';
+export * from './primitive-value-not-provided-error';
 export * from './not-supported-error';

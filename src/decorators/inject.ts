@@ -1,5 +1,5 @@
 import parameterMetadataKeys from '../constants/parameter-metadata-keys';
-import updateParameterMetadata from './update-parameter-metadata';
+import updateParameterMetadata from '../metadata/update-parameter-metadata';
 
 export const inject = (typeId: TypeID) => (target: any, targetKey: string, index: number) => {
     updateParameterMetadata(

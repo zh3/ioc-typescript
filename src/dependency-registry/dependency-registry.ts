@@ -2,6 +2,7 @@ import { CircularDependencyError, DependencyNotFoundError, InvalidTypeRegistrati
 import { getParameterMetadataList } from '../metadata/metadata-reader';
 import { validateParameterMetadata } from '../metadata/metadata-validator';
 import IParameterMetadata from '../metadata/parameter-metadata';
+import updateParameterMetadata from '../metadata/update-parameter-metadata';
 import ClassDependencyNode from './class-dependency-node';
 import { IDependencyNode } from './dependency-node';
 import findPath from './find-path';
@@ -9,11 +10,17 @@ import findPath from './find-path';
 export interface IDependencyRegistry {
     getInstance<T>(typeID: TypeID): T;
     registerDependency<T extends Newable>(typeId: TypeID, concreteType: T): DependencyRegistry;
+    configureConstantNamedParameter<T extends Newable, ConstantType>(
+        concreteType: T,
+        name: string,
+        constantValue: ConstantType,
+    ): any;
 }
 
 export default class DependencyRegistry implements IDependencyRegistry {
     constructor(
         private dependenciesByType: Map<TypeID, IDependencyNode> = new Map<TypeID, IDependencyNode>(),
+        private dependenciesByConcreteClass: Map<Newable, IDependencyNode> = new Map<Newable, any>(),
     ) {
     }
 
@@ -30,9 +37,27 @@ export default class DependencyRegistry implements IDependencyRegistry {
         }
 
         const parameterMetadataList: IParameterMetadata[] = getParameterMetadataList(concreteType);
-        this.dependenciesByType.set(typeID, new ClassDependencyNode<T>(concreteType, parameterMetadataList));
+        const classDependencyNode: IDependencyNode = new ClassDependencyNode<T>(
+            concreteType,
+            parameterMetadataList,
+        );
+        this.dependenciesByType.set(typeID, classDependencyNode);
+        this.dependenciesByConcreteClass.set(concreteType, classDependencyNode);
 
-        return new DependencyRegistry(this.dependenciesByType);
+        return new DependencyRegistry(this.dependenciesByType, this.dependenciesByConcreteClass);
+    }
+
+    public configureConstantNamedParameter(
+        concreteType: Newable,
+        name: string,
+        constantValue: any,
+    ) {
+        const dependencyNode: IDependencyNode = this.dependenciesByConcreteClass.get(
+            concreteType,
+        ) as IDependencyNode;
+        dependencyNode.useNamedConstantDependency(name, constantValue);
+
+        return new DependencyRegistry(this.dependenciesByType, this.dependenciesByConcreteClass);
     }
 
     public getInstance<T>(typeID: TypeID): T {

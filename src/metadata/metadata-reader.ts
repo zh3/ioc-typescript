@@ -8,11 +8,11 @@ export function getParameterMetadataList(concreteType: Newable): IParameterMetad
     );
     const compilerParamTypes: ICompilerSerializedType[] = getCompilerParamTypes(concreteType);
 
-    return compilerParamTypes.map((compilerParamType: ICompilerSerializedType, i: number) => {
+    return compilerParamTypes.map((compilerSerializedType: ICompilerSerializedType, i: number) => {
         const userDefinedParameterMetadata: IParameterMetadata = userDefinedParameterMetadataList[i];
 
         return {
-            compilerParamType,
+            compilerSerializedType,
             ...userDefinedParameterMetadata,
         };
     });

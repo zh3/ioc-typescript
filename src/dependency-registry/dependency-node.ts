@@ -5,4 +5,5 @@ export type DependencyResolver = (TypeID) => any;
 export interface IDependencyNode {
     parameterMetadataList: IParameterMetadata[];
     getDependency<T>(resolveDependency: DependencyResolver): any;
+    useNamedConstantDependency(name: string, constant: any): void;
 }

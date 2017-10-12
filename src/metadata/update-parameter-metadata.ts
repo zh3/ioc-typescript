@@ -17,8 +17,10 @@ export default function updateParameterMetadata(
         : [];
 
     const parameterMetadata = parameterMetadataList[index] || {};
-    parameterMetadata[metadataKey] = metadataValue;
-    parameterMetadataList[index] = parameterMetadata;
+    parameterMetadataList[index] = {
+        ...parameterMetadata,
+        [metadataKey]: metadataValue,
+    };
 
     Reflect.defineMetadata(
         metadataKeys.PARAMMETADATA,
