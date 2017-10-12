@@ -112,7 +112,7 @@ export class TimeTrial implements IRace {
 }
 ```
 ### Retrieving an instance
-`getInstance<>()` is called for a particular type identifier and abstract type. If all necessary dependencies are registered with the container, it will return an instance, otherwise a `DependencyNotFoundError` is thrown.
+`getInstance<>()` is called for a particular type identifier and abstract type. If all necessary dependencies are registered with the container, it will autowire them and return an instance, otherwise a `DependencyNotFoundError` is thrown.
 ```Typescript
         const container: Container = new Container()
             .for<IVehicle>(testTypeIDs.VEHICLE).use(Car)
@@ -127,6 +127,37 @@ export class TimeTrial implements IRace {
             'current speed is: 50',
             'YAY!',
         ]);
+```
+Primitives are never autowired, so concrete values must be provided for them explicitly in the constructor. Constructor parameters can be decorated with a name `@named` then their values provided using `forConcreteType`.
+
+Person.ts
+```
+@injectable
+export class Person implements IPerson {
+    constructor(
+        @named('name') private name: string,
+        @named('age') private age: number,
+        @named('siblings') private siblings: string[],
+    ) {
+    }
+
+    public introduce(): string {
+        const siblingIntro = this.siblings.reduce(
+            (acc, sibling, i) => `${acc}${i === this.siblings.length - 1 ?  ',' : ''} ${sibling}`, '',
+        );
+        return `My name is ${this.name} and I am ${this.age}. My siblings are${siblingIntro}`;
+    }
+}
+```
+Providing constant values
+```
+        const container: Container = new Container()
+            .for<IPerson>(testTypeIDs.PERSON).use(Person);
+
+        container.forConcreteType(Person)
+            .forParamNamed('name').useConstantValue('August')
+            .forParamNamed('age').useConstantValue(26)
+            .forParamNamed('siblings').useConstantValue(['June', 'May']);
 ```
 
 ## Circular dependency checking
